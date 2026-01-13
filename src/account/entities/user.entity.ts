@@ -1,20 +1,20 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ArticleEntity {
+export class UserEntity {
   @ApiProperty()
   id: number;
 
   @ApiProperty()
-  title: string;
-
-  @ApiProperty({ required: false, nullable: true })
-  description: string | null;
+  login: string;
 
   @ApiProperty()
-  body: string;
+  password: string;
+
+  @ApiProperty({ type: [String] })
+  roles: string[];
 
   @ApiProperty()
-  published: boolean;
+  status: string;
 
   @ApiProperty()
   createdAt: Date;

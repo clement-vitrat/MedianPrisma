@@ -2,10 +2,11 @@
 
 import { PrismaClient } from '@prisma/client';
 
+// initialize Prisma Client
 const prisma = new PrismaClient();
 
 async function main() {
-  // On utilise 'upsert' pour ne pas créer de doublons si on relance le script
+  // create two dummy articles
   const post1 = await prisma.article.upsert({
     where: { title: 'Prisma Adds Support for MongoDB' },
     update: {},
@@ -33,11 +34,14 @@ async function main() {
   console.log({ post1, post2 });
 }
 
+// execute the main function
 main()
   .catch((e) => {
     console.error(e);
     process.exit(1);
   })
   .finally(async () => {
+    // close Prisma Client at the end
     await prisma.$disconnect();
   });
+

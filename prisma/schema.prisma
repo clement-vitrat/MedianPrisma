@@ -1,4 +1,8 @@
-// prisma/schema.prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -9,6 +13,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// prisma/schema.prisma
+
+model User {
+  id        Int       @id @default(autoincrement())
+  login     String    @unique
+  password  String
+  roles     String[]
+  status    String    @default("open")
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
 model Article {
   id          Int      @id @default(autoincrement())
   title       String   @unique
@@ -17,4 +34,44 @@ model Article {
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Film {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  duration    Int
+  releaseDate DateTime
+  genre       String
+  bookings    Booking[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Cinema {
+  id        Int        @id @default(autoincrement())
+  name      String
+  address   String
+  city      String
+  phone     String
+  capacity  Int
+  bookings  Booking[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Booking {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id])
+  filmId        Int
+  film          Film     @relation(fields: [filmId], references: [id])
+  cinemaId      Int
+  cinema        Cinema   @relation(fields: [cinemaId], references: [id])
+  bookingDate   DateTime
+  numberOfSeats Int
+  totalPrice    Float
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
